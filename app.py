@@ -6,6 +6,8 @@ import pandas as pd
 
 app = Flask(__name__)
 
+APP_VERSION = "1.1.0"
+
 # Load trained model
 model = joblib.load("models/student_model.pkl")
 
@@ -108,5 +110,25 @@ def predict():
         return jsonify({"error": "Prediction failed"}), 500
 
 
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({
+        "status": "healthy",
+        "application": "StudyIQ",
+        "version": APP_VERSION
+    })
+
+
+@app.route("/version", methods=["GET"])
+def version():
+    return jsonify({
+        "application": "StudyIQ",
+        "version": APP_VERSION,
+        "model": "Random Forest Regressor"
+    })
+
+
 if __name__ == "__main__":
+    
     app.run(host="0.0.0.0", port=5000, debug=False)
